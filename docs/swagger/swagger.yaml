@@ -1,0 +1,89 @@
+definitions:
+  api.HealthcheckStatus:
+    properties:
+      details:
+        type: object
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  rye.JSONStatus:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact:
+    name: <update contact name>
+  description: <update description>
+  license: {}
+  title: go-microservice-1
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: If this endpoint does not work, something is seriously busted
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: The service was able to start enough to be able to service
+            inbound requests
+          schema:
+            $ref: '#/definitions/rye.JSONStatus'
+            type: object
+      summary: Greets you with a friendly message
+      tags:
+      - basic
+  /docs/index.html:
+    get:
+      description: This endpoint serves the API spec via Swagger-UI (using github.com/swaggo/swag)
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: Swagger-UI
+          schema:
+            type: string
+      summary: View API docs via Swagger-UI
+      tags:
+      - basic
+  /health:
+    get:
+      description: Describes the current health of fleet-api
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: All is well
+          schema:
+            $ref: '#/definitions/api.HealthcheckStatus'
+            type: object
+        "500":
+          description: The service is unhealthy
+          schema:
+            $ref: '#/definitions/api.HealthcheckStatus'
+            type: object
+      summary: Describes the current health of fleet-api
+      tags:
+      - basic
+  /version:
+    get:
+      description: Another simple handler, similar to '/' - if this does not work,
+        something is broken
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '''status'' contains the string ''version'', while ''message''
+            will contain the actual version'
+          schema:
+            $ref: '#/definitions/rye.JSONStatus'
+            type: object
+      summary: Returns the current version of the service
+      tags:
+      - basic
+swagger: "2.0"

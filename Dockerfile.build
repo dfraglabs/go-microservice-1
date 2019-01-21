@@ -1,0 +1,11 @@
+FROM golang:1.7-alpine
+
+# Install some pkackages
+RUN apk update && apk add make git
+
+RUN mkdir -p /go/src/github.com/dfraglabs/go-microservice-1
+ADD . /go/src/github.com/dfraglabs/go-microservice-1
+WORKDIR /go/src/github.com/dfraglabs/go-microservice-1
+
+ENV CGO_ENABLED=0
+ENV GOOS=linux

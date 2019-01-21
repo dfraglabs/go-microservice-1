@@ -1,0 +1,40 @@
+- name: Run tests
+  service: build
+  command: make test
+
+- name: Extract artifact
+  service: build
+  command: make build/linux OUTPUT_DIR=/build
+
+- name: Build app
+  service: app
+  command: --version
+
+- name: Registry
+  type: serial
+  service: app
+  encrypted_dockercfg_path: codeship-dockercfg.encrypted
+  steps:
+  - name: Push all builds to quay.io
+    type: serial
+    steps:
+    - name: Push Branch-CommitID tag # Used for testing deploys
+      type: push
+      registry: quay.io
+      image_name: quay.io/dfraglabs/go-microservice-1
+      image_tag: "{{ .Branch }}-{{ .CommitID }}"
+    - name: Push Branch tag # Optional
+      type: push
+      registry: quay.io
+      image_name: quay.io/dfraglabs/go-microservice-1
+      image_tag: "{{ .Branch }}"
+    - name: Push master-CommitID tag # Used for Staging deploys
+      type: push
+      registry: quay.io
+      image_name: quay.io/dfraglabs/go-microservice-1
+      image_tag: "master-{{ .CommitID }}"
+    - name: Push release-CommitID tag # Used for Prod deploys
+      type: push
+      registry: quay.io
+      image_name: quay.io/dfraglabs/go-microservice-1
+      image_tag: "release-{{ .CommitID }}"

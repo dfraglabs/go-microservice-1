@@ -1,0 +1,11 @@
+build:
+  build:
+    dockerfile_path: Dockerfile.build
+  volumes:
+    - ./build:/build
+app:
+  build:
+    dockerfile_path: Dockerfile
+    image: quay.io/dfraglabs/go-microservice-1
+  volumes:
+    - ./build:/build

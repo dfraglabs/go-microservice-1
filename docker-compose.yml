@@ -1,0 +1,14 @@
+version: "3"
+services:
+  go-microservice-1:
+    container_name: go-microservice-1
+    build: .
+    env_file:
+      - ./.env.docker
+    ports:
+      - "8080:80"
+
+networks:
+  default:
+    external:
+      name: invisionlocal_default
